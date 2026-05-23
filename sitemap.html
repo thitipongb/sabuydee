@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ragnarok Zombie Survival — Game Sitemap</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0d0a14;
+    --surface: #161022;
+    --card: #1e1630;
+    --border: #2e2448;
+    --accent: #8b5cf6;
+    --gold: #f59e0b;
+    --red: #ef4444;
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --text: #e2d9f3;
+    --muted: #8b7aa8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #1a0d2e 0%, #2d1b4e 50%, #1a0d2e 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  header .title-block h1 {
+    font-size: 28px; font-weight: 700; color: var(--gold);
+    text-shadow: 0 0 20px rgba(245,158,11,0.4);
+    letter-spacing: -0.5px;
+  }
+  header .title-block p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+  header .badge {
+    background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.4);
+    color: #c084fc; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex; gap: 24px; padding: 16px 48px;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  /* ── FLOW MAP ── */
+  .flow-section { padding: 40px 48px 20px; }
+  .flow-section h2 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
+
+  .flow-map {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; flex-wrap: wrap; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px;
+  }
+  .flow-node {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    text-align: center; cursor: pointer;
+  }
+  .flow-node .node-icon {
+    width: 52px; height: 52px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; transition: transform 0.2s;
+  }
+  .flow-node:hover .node-icon { transform: scale(1.1); }
+  .flow-node .node-label { font-size: 12px; font-weight: 500; color: var(--text); }
+  .flow-node .node-sub { font-size: 11px; color: var(--muted); }
+  .flow-arrow {
+    padding: 0 10px; color: var(--muted); font-size: 18px;
+    display: flex; align-items: center;
+  }
+  .flow-arrow.conditional {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+  .flow-arrow.conditional span { font-size: 10px; color: var(--muted); }
+
+  .node-menu .node-icon    { background: linear-gradient(135deg,#4c1d95,#7c3aed); border: 2px solid #8b5cf6; }
+  .node-play .node-icon    { background: linear-gradient(135deg,#14532d,#16a34a); border: 2px solid #22c55e; }
+  .node-lvlup .node-icon   { background: linear-gradient(135deg,#78350f,#d97706); border: 2px solid #f59e0b; }
+  .node-gameover .node-icon{ background: linear-gradient(135deg,#7f1d1d,#dc2626); border: 2px solid #ef4444; }
+
+  /* ── SCREENS GRID ── */
+  .screens-section { padding: 20px 48px 48px; }
+  .screens-section h2 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
+
+  .screens-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 28px;
+  }
+
+  .screen-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .screen-card:hover { transform: translateY(-4px); }
+  .screen-card.screen-menu    { border-color: #7c3aed; }
+  .screen-card.screen-play    { border-color: #16a34a; }
+  .screen-card.screen-lvlup   { border-color: #d97706; }
+  .screen-card.screen-gameover{ border-color: #dc2626; }
+
+  .card-header {
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .card-header .screen-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+  }
+  .screen-menu    .card-header .screen-icon { background: rgba(124,58,237,0.2); }
+  .screen-play    .card-header .screen-icon { background: rgba(22,163,74,0.2); }
+  .screen-lvlup   .card-header .screen-icon { background: rgba(217,119,6,0.2); }
+  .screen-gameover.card-header .screen-icon { background: rgba(220,38,38,0.2); }
+
+  .card-header .screen-meta h3 { font-size: 15px; font-weight: 600; }
+  .card-header .screen-meta p  { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .card-header .screen-badge {
+    margin-left: auto; font-size: 11px; padding: 3px 10px;
+    border-radius: 20px; font-weight: 500;
+  }
+  .screen-menu    .card-header .screen-badge { background: rgba(124,58,237,0.2); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+  .screen-play    .card-header .screen-badge { background: rgba(22,163,74,0.2);  color: #4ade80; border: 1px solid rgba(22,163,74,0.3); }
+  .screen-lvlup   .card-header .screen-badge { background: rgba(217,119,6,0.2);  color: #fbbf24; border: 1px solid rgba(217,119,6,0.3); }
+  .screen-gameover.card-header .screen-badge { background: rgba(220,38,38,0.2);  color: #f87171; border: 1px solid rgba(220,38,38,0.3); }
+
+  /* ── PHONE MOCKUP ── */
+  .phone-wrap {
+    padding: 24px; display: flex; justify-content: center; background: var(--bg);
+  }
+  .phone {
+    width: 180px; height: 360px; border-radius: 28px;
+    border: 3px solid #3a3050; background: #080410;
+    overflow: hidden; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .phone canvas { display: block; }
+
+  /* ── COMPONENTS LIST ── */
+  .components { padding: 0 20px 20px; }
+  .comp-title { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+  .comp-list { display: flex; flex-direction: column; gap: 6px; }
+  .comp-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .comp-item .ci-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .comp-item .ci-body { flex: 1; }
+  .comp-item .ci-name { font-size: 13px; font-weight: 500; }
+  .comp-item .ci-desc { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+  .comp-item .ci-tag {
+    font-size: 10px; padding: 2px 7px; border-radius: 10px;
+    margin-left: auto; flex-shrink: 0; align-self: center;
+  }
+  .tag-ui   { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+  .tag-logic{ background: rgba(34,197,94,0.15);  color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
+  .tag-input{ background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+  .tag-fx   { background: rgba(168,85,247,0.15); color: #c084fc; border: 1px solid rgba(168,85,247,0.25); }
+
+  /* ── TRANSITIONS ── */
+  .transitions { padding: 16px 20px; border-top: 1px solid var(--border); }
+  .trans-title { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .trans-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .trans-item {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; color: var(--muted);
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .trans-item span { color: var(--text); font-weight: 500; }
+
+  /* ── SYSTEMS SECTION ── */
+  .systems-section { padding: 0 48px 48px; }
+  .systems-section h2 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+  .systems-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  .sys-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px;
+  }
+  .sys-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .sys-card ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .sys-card li { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .sys-card li::before { content: ''; display: block; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 24px; color: var(--muted); font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 640px) {
+    header { padding: 20px 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
+    .legend { padding: 12px 20px; }
+    .flow-section, .screens-section, .systems-section { padding-left: 20px; padding-right: 20px; }
+    .flow-map { gap: 4px; padding: 16px; }
+    .flow-arrow { padding: 0 4px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="title-block">
+    <h1>⚔ Ragnarok: Zombie Survival</h1>
+    <p>Game Sitemap & Screen Reference — v1.0.0</p>
+  </div>
+  <div class="badge">📱 Mobile-First HTML5</div>
+</header>
+
+<!-- ── LEGEND ── -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6"></div> Menu / Start</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div> Gameplay</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> Level Up</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div> Game Over</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> UI Component</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#a855f7"></div> Visual Effect</div>
+</div>
+
+<!-- ── FLOW MAP ── -->
+<div class="flow-section">
+  <h2>Game Flow</h2>
+  <div class="flow-map">
+    <div class="flow-node node-menu">
+      <div class="node-icon">🏠</div>
+      <div class="node-label">Main Menu</div>
+      <div class="node-sub">Start Screen</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node node-play">
+      <div class="node-icon">⚔️</div>
+      <div class="node-label">Gameplay</div>
+      <div class="node-sub">Wave Battle</div>
+    </div>
+    <div class="flow-arrow conditional">
+      →<span>EXP เต็ม</span>
+    </div>
+    <div class="flow-node node-lvlup">
+      <div class="node-icon">✨</div>
+      <div class="node-label">Level Up</div>
+      <div class="node-sub">Stat Boost</div>
+    </div>
+    <div class="flow-arrow conditional">
+      →<span>ปิด Popup</span>
+    </div>
+    <div class="flow-node node-play">
+      <div class="node-icon">⚔️</div>
+      <div class="node-label">Gameplay</div>
+      <div class="node-sub">ต่อ Wave</div>
+    </div>
+    <div class="flow-arrow conditional">
+      →<span>HP = 0</span>
+    </div>
+    <div class="flow-node node-gameover">
+      <div class="node-icon">💀</div>
+      <div class="node-label">Game Over</div>
+      <div class="node-sub">Score Summary</div>
+    </div>
+    <div class="flow-arrow conditional">
+      →<span>Restart</span>
+    </div>
+    <div class="flow-node node-menu">
+      <div class="node-icon">🔄</div>
+      <div class="node-label">Main Menu</div>
+      <div class="node-sub">เริ่มใหม่</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREENS ── -->
+<div class="screens-section">
+  <h2>Screen Details</h2>
+  <div class="screens-grid">
+
+    <!-- ─ SCREEN 1: MENU ─ -->
+    <div class="screen-card screen-menu">
+      <div class="card-header">
+        <div class="screen-icon">🏠</div>
+        <div class="screen-meta">
+          <h3>Main Menu</h3>
+          <p>STATE: MENU (0)</p>
+        </div>
+        <div class="screen-badge">Entry Point</div>
+      </div>
+      <div class="phone-wrap">
+        <div class="phone">
+          <canvas id="c-menu" width="180" height="360"></canvas>
+        </div>
+      </div>
+      <div class="components">
+        <div class="comp-title">Components</div>
+        <div class="comp-list">
+          <div class="comp-item">
+            <div class="ci-icon">🌟</div>
+            <div class="ci-body">
+              <div class="ci-name">Animated Star Background</div>
+              <div class="ci-desc">120 ดาวกระพริบแบบ sine wave</div>
+            </div>
+            <div class="ci-tag tag-fx">FX</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">⚔️</div>
+            <div class="ci-body">
+              <div class="ci-name">Logo + Title</div>
+              <div class="ci-desc">Glow shadow สีทอง / แดง, font serif</div>
+            </div>
+            <div class="ci-tag tag-ui">UI</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">🧙</div>
+            <div class="ci-body">
+              <div class="ci-name">Knight Preview Sprite</div>
+              <div class="ci-desc">Canvas-drawn ขยาย 2.2× ตรงกลาง</div>
+            </div>
+            <div class="ci-tag tag-ui">UI</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">🏷️</div>
+            <div class="ci-body">
+              <div class="ci-name">Feature Badges</div>
+              <div class="ci-desc">Wave System, Boss Fights, Level Up, Drop Items</div>
+            </div>
+            <div class="ci-tag tag-ui">UI</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">▶️</div>
+            <div class="ci-body">
+              <div class="ci-name">Start Button</div>
+              <div class="ci-desc">Gradient สีม่วง→ส้ม, glow เมื่อ hover</div>
+            </div>
+            <div class="ci-tag tag-input">Input</div>
+          </div>
+        </div>
+      </div>
+      <div class="transitions">
+        <div class="trans-title">Triggers</div>
+        <div class="trans-list">
+          <div class="trans-item">👆 <span>Tap/Click</span> → Gameplay</div>
+          <div class="trans-item">⌨️ <span>Enter</span> → Gameplay</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─ SCREEN 2: GAMEPLAY ─ -->
+    <div class="screen-card screen-play">
+      <div class="card-header">
+        <div class="screen-icon">⚔️</div>
+        <div class="screen-meta">
+          <h3>Gameplay</h3>
+          <p>STATE: PLAY (1)</p>
+        </div>
+        <div class="screen-badge">Core Loop</div>
+      </div>
+      <div class="phone-wrap">
+        <div class="phone">
+          <canvas id="c-play" width="180" height="360"></canvas>
+        </div>
+      </div>
+      <div class="components">
+        <div class="comp-title">Components</div>
+        <div class="comp-list">
+          <div class="comp-item">
+            <div class="ci-icon">🗺️</div>
+            <div class="ci-body">
+              <div class="ci-name">Dungeon Tile Map</div>
+              <div class="ci-desc">48×48 tiles, Glast Heim theme, เสา + หลุมศพ</div>
+            </div>
+            <div class="ci-tag tag-ui">UI</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">❤️</div>
+            <div class="ci-body">
+              <div class="ci-name">HUD Bars (HP / MP)</div>
+              <div class="ci-desc">แถบแดง/น้ำเงิน + ตัวเลข, มุมบนซ้าย</div>
+            </div>
+            <div class="ci-tag tag-ui">UI</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">🌊</div>
+            <div class="ci-body">
+              <div class="ci-name">Wave Counter + Score</div>
+              <div class="ci-desc">กลางบน แสดง Wave / คะแนน / Kills</div>
+            </div>
+            <div class="ci-tag tag-ui">UI</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">🕹️</div>
+            <div class="ci-body">
+              <div class="ci-name">Virtual Joystick</div>
+              <div class="ci-desc">ซ้ายล่าง, radius 58px, glass morphism</div>
+            </div>
+            <div class="ci-tag tag-input">Input</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">⚡</div>
+            <div class="ci-body">
+              <div class="ci-name">Skill + ATK Buttons</div>
+              <div class="ci-desc">ขวาล่าง, CD indicator, glow เมื่อพร้อมใช้</div>
+            </div>
+            <div class="ci-tag tag-input">Input</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">💥</div>
+            <div class="ci-body">
+              <div class="ci-name">Damage Numbers + Particles</div>
+              <div class="ci-desc">Float ขึ้น, สีทองเมื่อ Crit</div>
+            </div>
+            <div class="ci-tag tag-fx">FX</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">⭐</div>
+            <div class="ci-body">
+              <div class="ci-name">EXP Bar</div>
+              <div class="ci-desc">แถบม่วงด้านล่างสุด</div>
+            </div>
+            <div class="ci-tag tag-logic">Logic</div>
+          </div>
+        </div>
+      </div>
+      <div class="transitions">
+        <div class="trans-title">Triggers</div>
+        <div class="trans-list">
+          <div class="trans-item">💀 <span>HP=0</span> → Game Over</div>
+          <div class="trans-item">✨ <span>EXP เต็ม</span> → Level Up</div>
+          <div class="trans-item">🌊 <span>Wave Clear</span> → Wave ถัดไป</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─ SCREEN 3: LEVEL UP ─ -->
+    <div class="screen-card screen-lvlup">
+      <div class="card-header">
+        <div class="screen-icon">✨</div>
+        <div class="screen-meta">
+          <h3>Level Up</h3>
+          <p>STATE: LVLUP (3)</p>
+        </div>
+        <div class="screen-badge">Popup</div>
+      </div>
+      <div class="phone-wrap">
+        <div class="phone">
+          <canvas id="c-lvlup" width="180" height="360"></canvas>
+        </div>
+      </div>
+      <div class="components">
+        <div class="comp-title">Components</div>
+        <div class="comp-list">
+          <div class="comp-item">
+            <div class="ci-icon">🌑</div>
+            <div class="ci-body">
+              <div class="ci-name">Dark Overlay</div>
+              <div class="ci-desc">rgba(0,0,20,0.9) หยุด gameplay ชั่วคราว</div>
+            </div>
+            <div class="ci-tag tag-fx">FX</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">✨</div>
+            <div class="ci-body">
+              <div class="ci-name">LEVEL UP! Text</div>
+              <div class="ci-desc">Gold glow, shadowBlur 45px</div>
+            </div>
+            <div class="ci-tag tag-ui">UI</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">📊</div>
+            <div class="ci-body">
+              <div class="ci-name">Stat Increase Display</div>
+              <div class="ci-desc">❤ HP+22 / ⚔ ATK+6 / 💠 MP+12</div>
+            </div>
+            <div class="ci-tag tag-logic">Logic</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">▶️</div>
+            <div class="ci-body">
+              <div class="ci-name">Continue Button</div>
+              <div class="ci-desc">สีน้ำเงิน, "สู้ต่อ!" กลับ Gameplay</div>
+            </div>
+            <div class="ci-tag tag-input">Input</div>
+          </div>
+        </div>
+      </div>
+      <div class="transitions">
+        <div class="trans-title">Triggers</div>
+        <div class="trans-list">
+          <div class="trans-item">👆 <span>Tap/Click</span> → Gameplay</div>
+          <div class="trans-item">⌨️ <span>Space/Enter</span> → Gameplay</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─ SCREEN 4: GAME OVER ─ -->
+    <div class="screen-card screen-gameover">
+      <div class="card-header">
+        <div class="screen-icon">💀</div>
+        <div class="screen-meta">
+          <h3>Game Over</h3>
+          <p>STATE: OVER (2)</p>
+        </div>
+        <div class="screen-badge">End State</div>
+      </div>
+      <div class="phone-wrap">
+        <div class="phone">
+          <canvas id="c-gameover" width="180" height="360"></canvas>
+        </div>
+      </div>
+      <div class="components">
+        <div class="comp-title">Components</div>
+        <div class="comp-list">
+          <div class="comp-item">
+            <div class="ci-icon">🌑</div>
+            <div class="ci-body">
+              <div class="ci-name">Dark Overlay</div>
+              <div class="ci-desc">rgba(0,0,0,0.88) คลุมโลกเกม</div>
+            </div>
+            <div class="ci-tag tag-fx">FX</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">💀</div>
+            <div class="ci-body">
+              <div class="ci-name">GAME OVER Title</div>
+              <div class="ci-desc">Red glow, shadowBlur 35px</div>
+            </div>
+            <div class="ci-tag tag-ui">UI</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">📋</div>
+            <div class="ci-body">
+              <div class="ci-name">Score Summary Panel</div>
+              <div class="ci-desc">Wave / Kills / Score / Level สูงสุด</div>
+            </div>
+            <div class="ci-tag tag-logic">Logic</div>
+          </div>
+          <div class="comp-item">
+            <div class="ci-icon">🔄</div>
+            <div class="ci-body">
+              <div class="ci-name">Restart Button</div>
+              <div class="ci-desc">สีม่วง, "เล่นใหม่", reset state ทั้งหมด</div>
+            </div>
+            <div class="ci-tag tag-input">Input</div>
+          </div>
+        </div>
+      </div>
+      <div class="transitions">
+        <div class="trans-title">Triggers</div>
+        <div class="trans-list">
+          <div class="trans-item">👆 <span>Tap/Click</span> → Gameplay (reset)</div>
+          <div class="trans-item">⌨️ <span>Enter</span> → Gameplay (reset)</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── SYSTEMS ── -->
+<div class="systems-section">
+  <h2>Game Systems</h2>
+  <div class="systems-grid">
+
+    <div class="sys-card">
+      <h4>🌊 Wave System</h4>
+      <ul>
+        <li>Wave 1 เริ่ม 12 ตัว +4/wave</li>
+        <li>Boss ทุก 5 Waves</li>
+        <li>HP/ATK ศัตรู ×1.11 ต่อ Wave</li>
+        <li>Spawn ทุก 280ms delay</li>
+        <li>Timer 3s ระหว่าง Wave</li>
+      </ul>
+    </div>
+
+    <div class="sys-card">
+      <h4>👾 Enemy Types</h4>
+      <ul>
+        <li>🟢 Zombie — ช้า, HP น้อย</li>
+        <li>🟣 Ghoul — เร็ว, Claws</li>
+        <li>⚪ Skeleton — เร็วมาก, Melee</li>
+        <li>🟤 Zombie Archer — Range 220px</li>
+        <li>🔴 Undead Lord — Boss, HP 900</li>
+      </ul>
+    </div>
+
+    <div class="sys-card">
+      <h4>⬆️ Level System</h4>
+      <ul>
+        <li>EXP ต่อ kill: 15–220</li>
+        <li>NextExp ×1.4 ต่อ Level</li>
+        <li>HP +22, ATK +6, MP +12</li>
+        <li>HP ฟื้น 55 เมื่อ Level Up</li>
+        <li>Attack cooldown ลดตาม Lv</li>
+      </ul>
+    </div>
+
+    <div class="sys-card">
+      <h4>🎮 Controls</h4>
+      <ul>
+        <li>Virtual Joystick (touch ซ้าย)</li>
+        <li>SKILL button (touch ขวาบน)</li>
+        <li>ATK button (touch ขวาล่าง)</li>
+        <li>WASD / Arrow Keys</li>
+        <li>Z = Skill, X = Attack</li>
+      </ul>
+    </div>
+
+    <div class="sys-card">
+      <h4>⚡ Skill System</h4>
+      <ul>
+        <li>Auto-attack: range 75px</li>
+        <li>AOE Skill: range 140px</li>
+        <li>Skill cost: 30 MP</li>
+        <li>Skill CD: 5 วินาที</li>
+        <li>MP Regen: 6/วินาที</li>
+      </ul>
+    </div>
+
+    <div class="sys-card">
+      <h4>💊 Drop System</h4>
+      <ul>
+        <li>HP Potion — drop 18%</li>
+        <li>MP Potion — drop 12%</li>
+        <li>HP Heal: 35 + Lv×6</li>
+        <li>MP Restore: 45</li>
+        <li>Pickup range: 26px</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  Ragnarok: Zombie Survival — Sitemap v1.0 &nbsp;·&nbsp;
+  <a href="index.html" style="color:#8b5cf6;text-decoration:none;">▶ Play Game</a> &nbsp;·&nbsp;
+  <a href="https://github.com/thitipongb/sabuydee" target="_blank" style="color:#8b5cf6;text-decoration:none;">GitHub</a>
+</footer>
+
+<script>
+// ─────────────────────────────────────────
+// Draw phone mockups via Canvas
+// ─────────────────────────────────────────
+
+function rRect(ctx, x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+}
+
+// ── MENU SCREEN ──
+function drawMenuScreen(c) {
+  const ctx = c.getContext('2d');
+  const W=180,H=360;
+  ctx.fillStyle='#080410'; ctx.fillRect(0,0,W,H);
+  // Stars
+  for(let i=0;i<60;i++){
+    let x=(i*137)%W, y=(i*83)%H;
+    ctx.fillStyle=`rgba(255,255,255,${0.2+0.5*Math.random()})`;
+    ctx.fillRect(x,y,1,1);
+  }
+  // Ground
+  ctx.fillStyle='#150a22'; ctx.fillRect(0,H*0.82,W,H*0.18);
+  ctx.fillStyle='#2a1640'; ctx.fillRect(0,H*0.82,W,3);
+  // Title
+  ctx.shadowColor='#8844ff'; ctx.shadowBlur=12;
+  ctx.fillStyle='#ffcc00'; ctx.font='bold 14px serif';
+  ctx.textAlign='center'; ctx.fillText('⚔ RAGNAROK ⚔',W/2,50);
+  ctx.shadowColor='#ff3300'; ctx.shadowBlur=8;
+  ctx.fillStyle='#ff3344'; ctx.font='bold 9px serif';
+  ctx.fillText('🧟 ZOMBIE SURVIVAL 🧟',W/2,68);
+  ctx.shadowBlur=0;
+  // Divider
+  ctx.strokeStyle='#6633aa'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(W*0.15,78); ctx.lineTo(W*0.85,78); ctx.stroke();
+  // Knight
+  ctx.save(); ctx.translate(W/2,140);
+  ctx.fillStyle='#7a8faa'; ctx.fillRect(-12,-14,24,22);
+  ctx.fillStyle='#aabfcf'; ctx.fillRect(-10,-22,20,10);
+  ctx.fillStyle='#ffcc00'; ctx.fillRect(-8,-10,16,3);
+  ctx.fillStyle='#ccddee'; ctx.fillRect(10,-20,4,28);
+  ctx.fillStyle='#334488'; ctx.fillRect(-18,-10,10,16);
+  ctx.fillStyle='#3a55aa'; ctx.fillRect(-8,8,6,12); ctx.fillRect(2,8,6,12);
+  ctx.fillStyle='#cc2222'; ctx.fillRect(-3,-26,6,6);
+  ctx.restore();
+  // Badges
+  ['Wave','Boss','Lv Up','Drops'].forEach((t,i)=>{
+    let bx=8+i*43;
+    ctx.fillStyle='rgba(80,40,120,0.8)';
+    rRect(ctx,bx,H*0.7,38,16,4); ctx.fill();
+    ctx.fillStyle='#ccbbff'; ctx.font='7px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(t,bx+19,H*0.7+11);
+  });
+  // Button
+  ctx.shadowColor='#ffcc00'; ctx.shadowBlur=10;
+  let bg=ctx.createLinearGradient(30,300,150,330);
+  bg.addColorStop(0,'#6622cc'); bg.addColorStop(1,'#cc3300');
+  ctx.fillStyle=bg; rRect(ctx,30,H*0.83,120,36,10); ctx.fill();
+  ctx.strokeStyle='#ffcc00'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.shadowBlur=0;
+  ctx.fillStyle='#fff'; ctx.font='bold 11px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('▶  เริ่มเกม',W/2,H*0.83+23);
+  ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='7px sans-serif';
+  ctx.fillText('แตะที่ใดก็ได้',W/2,H-8);
+}
+
+// ── GAMEPLAY SCREEN ──
+function drawPlayScreen(c) {
+  const ctx = c.getContext('2d');
+  const W=180,H=360;
+  // Tiles
+  for(let ty=0;ty<9;ty++) for(let tx=0;tx<5;tx++){
+    let ci=(tx+ty)%3;
+    let cols=['#251926','#201520','#2a1d2e'];
+    ctx.fillStyle=cols[ci]; ctx.fillRect(tx*36,ty*40,36,40);
+    if((tx+ty)%4===0){ ctx.fillStyle='#34264a'; ctx.fillRect(tx*36+2,ty*40+2,32,36); }
+  }
+  // Graves
+  [[72,80],[144,120],[36,200],[108,240]].forEach(([gx,gy])=>{
+    ctx.fillStyle='#48485a'; ctx.fillRect(gx+5,gy,5,18);
+    ctx.fillStyle='#38384a'; ctx.fillRect(gx,gy+5,15,4);
+  });
+  // Pillar
+  ctx.fillStyle='#5e4c70'; ctx.fillRect(145,150,26,35);
+  ctx.fillStyle='#4e3d5e'; ctx.fillRect(145,150,26,5);
+
+  // Knight
+  ctx.save(); ctx.translate(90,185);
+  ctx.fillStyle='#7a8faa'; ctx.fillRect(-7,-7,14,14);
+  ctx.fillStyle='#aabfcf'; ctx.fillRect(-6,-17,12,12);
+  ctx.fillStyle='#4466aa'; ctx.fillRect(-5,-3,10,8);
+  ctx.fillStyle='#ccddee'; ctx.fillRect(7,-15,3,22);
+  ctx.fillStyle='#334488'; ctx.fillRect(-13,-8,8,14);
+  ctx.fillStyle='#3a55aa'; ctx.fillRect(-5,7,4,10); ctx.fillRect(1,7,4,10);
+  ctx.fillStyle='#cc2222'; ctx.fillRect(-2,-20,4,5);
+  ctx.restore();
+
+  // Zombie enemy
+  ctx.save(); ctx.translate(30,100);
+  ctx.fillStyle='#5a8030'; ctx.fillRect(-6,-14,12,10);
+  ctx.fillStyle='#374820'; ctx.fillRect(-6,-4,12,12);
+  ctx.fillStyle='#4a6a28'; ctx.fillRect(-10,-6,6,4); ctx.fillRect(4,-5,6,4);
+  ctx.fillStyle='#bb2222'; ctx.fillRect(-4,-10,2,2); ctx.fillRect(1,-10,2,2);
+  ctx.fillStyle='#300'; ctx.fillRect(-3,-3,8,5);
+  ctx.restore();
+  // Enemy HP bar
+  ctx.fillStyle='#300'; ctx.fillRect(12,80,28,3);
+  ctx.fillStyle='#ee2244'; ctx.fillRect(12,80,20,3);
+
+  // Ghoul
+  ctx.save(); ctx.translate(150,260);
+  ctx.fillStyle='#606070'; ctx.fillRect(-7,-12,14,16);
+  ctx.fillStyle='#707080'; ctx.fillRect(-6,-20,12,10);
+  ctx.fillStyle='#9900cc'; ctx.fillRect(-4,-16,3,4); ctx.fillRect(1,-16,3,4);
+  ctx.restore();
+  ctx.fillStyle='#300'; ctx.fillRect(136,236,28,3);
+  ctx.fillStyle='#ee2244'; ctx.fillRect(136,236,18,3);
+
+  // Particle effects
+  [[80,175],[95,168],[105,178]].forEach(([px,py])=>{
+    ctx.fillStyle=`rgba(255,200,50,0.7)`; ctx.fillRect(px,py,3,3);
+  });
+  // Damage number
+  ctx.fillStyle='#ffcc00'; ctx.font='bold 10px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('42!',90,162);
+
+  // Drop item
+  ctx.fillStyle='#ff2244'; ctx.beginPath(); ctx.arc(55,220,6,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.fillRect(54,215,2,10); ctx.fillRect(50,219,10,2);
+
+  // HUD
+  ctx.fillStyle='rgba(0,0,0,0.75)';
+  rRect(ctx,4,4,110,32,5); ctx.fill();
+  ctx.fillStyle='#550011'; rRect(ctx,10,9,100,8,3); ctx.fill();
+  ctx.fillStyle='#ee2244'; rRect(ctx,10,9,75,8,3); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.font='7px sans-serif'; ctx.textAlign='left';
+  ctx.fillText('❤ 115/150',11,16);
+  ctx.fillStyle='#000044'; rRect(ctx,10,20,100,7,3); ctx.fill();
+  ctx.fillStyle='#2244ee'; rRect(ctx,10,20,60,7,3); ctx.fill();
+  ctx.fillStyle='#bbd'; ctx.font='6px sans-serif'; ctx.fillText('💠 65/100',11,26);
+
+  ctx.fillStyle='rgba(0,0,0,0.75)';
+  rRect(ctx,W/2-44,4,88,24,5); ctx.fill();
+  ctx.fillStyle='#ffcc00'; ctx.font='bold 8px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('⚔ WAVE 3',W/2,14);
+  ctx.fillStyle='#fff'; ctx.font='6px sans-serif'; ctx.fillText('350 pts  ☠12',W/2,23);
+
+  ctx.fillStyle='rgba(0,0,0,0.75)'; rRect(ctx,W-38,4,34,24,5); ctx.fill();
+  ctx.fillStyle='#ffcc00'; ctx.font='bold 9px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('Lv.3',W-21,15); ctx.fillStyle='#888'; ctx.font='6px sans-serif';
+  ctx.fillText('Knight',W-21,24);
+
+  // Joystick
+  ctx.fillStyle='rgba(255,255,255,0.08)'; ctx.strokeStyle='rgba(255,255,255,0.25)';
+  ctx.lineWidth=1.5; ctx.beginPath(); ctx.arc(42,H-55,32,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle='rgba(100,100,220,0.6)'; ctx.beginPath(); ctx.arc(38,H-60,14,0,Math.PI*2); ctx.fill();
+
+  // Skill btn
+  ctx.shadowColor='#ffcc00'; ctx.shadowBlur=8;
+  ctx.fillStyle='#5533aa'; ctx.beginPath(); ctx.arc(W-28,H-58,24,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#aa77ff'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.shadowBlur=0;
+  ctx.font='16px sans-serif'; ctx.textAlign='center'; ctx.fillText('⚔️',W-28,H-52);
+  ctx.fillStyle='rgba(255,255,255,0.6)'; ctx.font='6px sans-serif'; ctx.fillText('SKILL',W-28,H-30);
+
+  // ATK btn
+  ctx.fillStyle='#441100'; ctx.beginPath(); ctx.arc(W-62,H-32,16,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#ff7733'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.font='12px sans-serif'; ctx.fillText('🗡️',W-62,H-27);
+  ctx.fillStyle='rgba(255,255,255,0.6)'; ctx.font='6px sans-serif'; ctx.fillText('ATK',W-62,H-13);
+
+  // EXP bar
+  ctx.fillStyle='#110022'; ctx.fillRect(0,H-5,W,5);
+  ctx.fillStyle='#7700cc'; ctx.fillRect(0,H-5,W*0.6,5);
+  ctx.fillStyle='#bb44ff'; ctx.fillRect(0,H-5,W*0.2,2);
+}
+
+// ── LEVEL UP SCREEN ──
+function drawLvlupScreen(c) {
+  const ctx = c.getContext('2d');
+  const W=180,H=360;
+  // Game world behind
+  drawPlayScreen(c);
+  // Overlay
+  ctx.fillStyle='rgba(0,0,18,0.92)'; ctx.fillRect(0,0,W,H);
+  // Glow title
+  ctx.shadowColor='#ffcc00'; ctx.shadowBlur=20;
+  ctx.fillStyle='#ffdd00'; ctx.font='bold 18px serif';
+  ctx.textAlign='center'; ctx.fillText('✨ LEVEL UP! ✨',W/2,90);
+  ctx.shadowBlur=0;
+  // Level
+  ctx.fillStyle='#fff'; ctx.font='bold 26px serif'; ctx.fillText('Level 4',W/2,125);
+  // Stars burst
+  let stars=['✦','✧','✦','✧','✦'];
+  stars.forEach((s,i)=>{
+    let angle = (i/stars.length)*Math.PI*2 - Math.PI/2;
+    let r=38;
+    ctx.fillStyle='#ffcc00'; ctx.font='10px sans-serif';
+    ctx.fillText(s, W/2+Math.cos(angle)*r, 125+Math.sin(angle)*r);
+  });
+  // Stats panel
+  ctx.fillStyle='rgba(30,20,50,0.9)'; rRect(ctx,20,148,140,70,10); ctx.fill();
+  ctx.strokeStyle='#6644aa'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.font='11px sans-serif'; ctx.textAlign='center';
+  [['❤ HP','+22','#ff6677'],['⚔ ATK','+6','#ffcc44'],['💠 MP','+12','#6699ff']].forEach(([label,val,col],i)=>{
+    let bx=40+i*47;
+    ctx.fillStyle='rgba(255,255,255,0.06)'; rRect(ctx,bx-15,155,38,54,6); ctx.fill();
+    ctx.font='9px sans-serif'; ctx.fillStyle='#aaaaaa'; ctx.fillText(label,bx+4,170);
+    ctx.font='bold 13px sans-serif'; ctx.fillStyle=col; ctx.fillText(val,bx+4,188);
+  });
+  // Button
+  ctx.fillStyle='#1a3a88'; rRect(ctx,40,232,100,32,8); ctx.fill();
+  ctx.strokeStyle='#44aaff'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.fillStyle='#fff'; ctx.font='bold 11px sans-serif'; ctx.fillText('⚔ สู้ต่อ!',W/2,253);
+  // EXP bar
+  ctx.fillStyle='#110022'; ctx.fillRect(0,H-5,W,5);
+  ctx.fillStyle='#7700cc'; ctx.fillRect(0,H-5,4,5);
+}
+
+// ── GAME OVER SCREEN ──
+function drawGameoverScreen(c) {
+  const ctx = c.getContext('2d');
+  const W=180,H=360;
+  drawPlayScreen(c);
+  ctx.fillStyle='rgba(0,0,0,0.9)'; ctx.fillRect(0,0,W,H);
+  ctx.shadowColor='#ff0000'; ctx.shadowBlur=22;
+  ctx.fillStyle='#ff2244'; ctx.font='bold 18px serif';
+  ctx.textAlign='center'; ctx.fillText('💀 GAME OVER 💀',W/2,72);
+  ctx.shadowBlur=0;
+  // Panel
+  ctx.fillStyle='rgba(10,0,10,0.85)'; rRect(ctx,22,90,136,140,10); ctx.fill();
+  ctx.strokeStyle='#552266'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.fillStyle='#ffcc00'; ctx.font='bold 9px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('— สรุปผลการต่อสู้ —',W/2,106);
+  let stats=[
+    ['🌊 Wave ที่รอดได้','5'],
+    ['☠ ฆ่าสัตว์','47 ตัว'],
+    ['⭐ คะแนน','1,840'],
+    ['🏆 Level สูงสุด','6'],
+  ];
+  ctx.font='9px sans-serif';
+  stats.forEach(([k,v],i)=>{
+    let y=122+i*22;
+    ctx.fillStyle='#aaaaaa'; ctx.textAlign='left'; ctx.fillText(k,32,y);
+    ctx.fillStyle='#ffffff'; ctx.textAlign='right'; ctx.fillText(v,152,y);
+  });
+  // Button
+  ctx.shadowColor='#ffcc00'; ctx.shadowBlur=8;
+  ctx.fillStyle='#4a1188'; rRect(ctx,40,242,100,32,8); ctx.fill();
+  ctx.strokeStyle='#ffcc00'; ctx.lineWidth=1.5; ctx.stroke(); ctx.shadowBlur=0;
+  ctx.fillStyle='#fff'; ctx.font='bold 11px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('🔄 เล่นใหม่',W/2,263);
+}
+
+drawMenuScreen(document.getElementById('c-menu'));
+drawPlayScreen(document.getElementById('c-play'));
+drawLvlupScreen(document.getElementById('c-lvlup'));
+drawGameoverScreen(document.getElementById('c-gameover'));
+</script>
+</body>
+</html>
